@@ -90,7 +90,7 @@ After authorization, you can use the API. API has two endpoints **/chat** GET an
 curl -X 'GET' \
   'http://0.0.0.0:8000/chat' \
   -H 'accept: application/json' \
-  -H 'X-API-KEY: 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'
+  -H 'X-API-KEY: "your_secret_api_key"'
   ```
 
 **POST /chat** -  provides the ability to communicate with the chatbot. 
