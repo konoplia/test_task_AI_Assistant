@@ -35,7 +35,6 @@ also you need to put the name of the file in the **.env** file in the **PDF_FILE
 
 **File you can download** [here](https://www.dropbox.com/s/9npstuvp2vhnq4z/Untitled%205.pdf?dl=0).
 
-> **Note:** Name of the file you should put in the **constants.py** file in the **PATH_TO_PDF** variable.
 ```
 # path to pdf file
 PATH_TO_PDF = "name_of_file.pdf"
