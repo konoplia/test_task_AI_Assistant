@@ -1,6 +1,7 @@
 from fastapi.testclient import TestClient
 
-from app.main import app, API_KEY
+from app.main import app
+from app.decorators import API_KEY
 
 
 client = TestClient(app)
