@@ -4,7 +4,7 @@ from fastapi import FastAPI, Depends, HTTPException, Request
 from fastapi.security import APIKeyHeader
 from dotenv import load_dotenv
 
-from chat.chat_interactor import create_answer
+from chat.chat_interactor import create_answer, get_user_prompt
 from constants import PROMPT_TEMPLATE
 from app.pydantic_models import Message
 
@@ -17,6 +17,14 @@ app = FastAPI()
 API_KEY = os.getenv("OPENAI_API_KEY")
 if not API_KEY:
     raise Exception("API_KEY not set in environment")
+
+
+@app.get("/chat")
+def chat(api_key: str = Depends(api_key_header)):
+    if api_key != API_KEY:
+        raise HTTPException(status_code=403, detail="Invalid API Key")
+    response = get_user_prompt()
+    return {"message": response}
 
 
 @app.post("/chat")

@@ -5,16 +5,26 @@ from langchain.vectorstores import FAISS
 from langchain.chains.question_answering import load_qa_chain
 from langchain.chat_models import ChatOpenAI
 from langchain import PromptTemplate
+from fastapi.exception_handlers import HTTPException
 
-from constants import TEMPLATE, MAX_TOKENS, PATH_TO_PDF
+from constants import TEMPLATE, MAX_TOKENS, PDF_FILE, FILE_NOT_FOUND, USER_PROMPTS
 
 
 prompt_template = PromptTemplate(template=TEMPLATE, input_variables=['question'])
 
 
+def get_user_prompt():
+    return USER_PROMPTS
+
+
 def parse_document(file_name):
-    reader = PdfReader(open(file_name, "rb"))
     raw_text = ""
+
+    try:
+        reader = PdfReader(open(file_name, "rb"))
+    except FileNotFoundError:
+        raise HTTPException(status_code=404, detail=FILE_NOT_FOUND)
+
     # if document has more than one page
     for _, page in enumerate(reader.pages):
         text = page.extract_text()
@@ -47,7 +57,7 @@ def get_qa_chain():
 
 
 def create_answer(question):
-    pars_doc = parse_document(PATH_TO_PDF)
+    pars_doc = parse_document(PDF_FILE)
     splitter = get_splitter()
     docsearch = create_docsearch(splitter, pars_doc)
     docs = docsearch.similarity_search(question)
